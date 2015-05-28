@@ -31,6 +31,7 @@ app.use(session({
 // Flash messages stored in session
 app.use(flash())
 
+mongoose.connect('mongodb://127.0.0.1:27017/uber')
 
 app.listen(port, ()=> console.log(`Listening @ http://127.0.0.1:${port}`))
 
