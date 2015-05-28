@@ -14,14 +14,20 @@
     <div class="jumbotron text-center">
         <h1><span class="fa fa-lock"></span> Uber Clone</h1>
 
-        <p>Enter an address</p>
+        <p>Driver Information</p>
          <form action="" method="post">
             <div class="form-group">
-                <label>Address</label>
-                <textarea name="address" class="form-control" rows="3" placeholder="Enter address here..."></textarea>
-                </textarea>
+                <label>Driver Id</label>
+                <input type="text" class="form-control" name="driverId">
+                <label>Cab Id</label>
+                <input type="text" class="form-control" name="cabId">
+                <label>Latitude</label>
+                <input type="text" class="form-control" name="lat">
+                <label>Longitude</label>
+                <input type="text" class="form-control" name="long">
+               
             </div>
-            <button type="submit" class="btn btn-info btn-lg">Find Cabs</button>
+            <button type="submit" class="btn btn-info btn-lg">Enter</button>
          </form>   
 
 

@@ -15,12 +15,11 @@ module.exports = (app) => {
 	app.post('/', (req, res) => {
 		// address should be formatted like:
 		// 850+Cherry+Ave.+San+Bruno,+CA+94066
-
 		let address = req.body.address
-		console.log("address: " + address);
 		//to do add the logic to find the nearest cabs 
+		console.log("Parsed address :" + parseAddressForGoogle(address))
+		res.redirect('/nearestCabs/'+ parseAddressForGoogle(address))
 
-		res.redirect('/nearestCabs/' + address)
 
 	})
 
@@ -59,12 +58,56 @@ module.exports = (app) => {
 				console.log(haversine(start, end))
 			});
 
+
 		} catch (e) {
 			console.log(e)
 		}
-
-
-
 		res.render('nearestCabs.ejs', {})
+
 	}))
+
+	/*
+	 *  Driver routes
+	 */
+
+
+	 app.get('/driver', (req, res) => {
+	 	res.render("driver.ejs")
+	 })
+
+	 app.post('/driver/:driverId', (req, res) => {
+	 	let driver_id = req.body.driverId
+	 	let cab_id = req.body.cabId
+	 	let lat = req.body.lat
+	 	let long = req.body.long
+	 	let driver 
+
+	 	if(lat === undefined){
+	 		//flash error
+	 	}
+
+	 	if(long === undefined){
+	 		//flash error
+	 	}
+
+
+
+	 	if(driver_id){
+	 		//old driver updating location
+	 	}else{
+	 		//new driver registering
+	 		let driver = new Driver()
+
+
+	 	}
+	 	
+	 })
+
 }
+
+
+function parseAddressForGoogle(address){
+	return address.replace(/[\n\s]/g, "+");
+	
+}
+
