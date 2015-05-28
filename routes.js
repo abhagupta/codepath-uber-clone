@@ -6,7 +6,7 @@ module.exports = (app) => {
 		console.log("address: " + address);
 		//to do add the logic to find the nearest cabs 
 
-		res.redirect('/nearestCabs/'+address)
+		res.redirect('/nearestCabs/'+ address)
 
 	})
 
@@ -17,12 +17,18 @@ module.exports = (app) => {
 		// do the calculation
 		// create the objects of cabs
 		// render them on the google maps
-		console.log("Paramter address :" + req.params.address);
+		let address = req.params.address
+		console.log("Paramter address :" + address);
 
 		res.render('nearestCabs.ejs', {
 			address: address
 		})
 	})
+
+	/*
+	 * 
+	 */
+
 
 
 }
