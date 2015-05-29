@@ -5,22 +5,53 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
-        body         { padding-top:80px; }
+        body { 
+            padding-top:80px; 
+        }
+        html, body, #map-canvas {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
     </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script>
+      <script>
+    function initialize() {
+      var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+      var mapOptions = {
+        zoom: 4,
+        center: myLatlng
+      }
+      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+      var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          title: 'Hello World!'
+      });
+    }
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
 </head>
 <body>
 <div class="container">
 
     <div class="jumbotron text-center">
-        <h1><span class="fa fa-lock"></span> Uber Clone</h1>
+        <!-- <h1><span class="fa fa-lock"></span> Uber Clone</h1> -->
+        <h1>GNUber</h1>
 
         <p>Nearest Cabs</p>
-         
-
-
-        
-       
+        <ul>
+        <% for(var i=0; i<drivers.length; i++) {%>
+            <li><%=  drivers[i].cabid %> : <%= drivers[i].distance %> miles away, lat: <%= drivers[i].lat %>, lng: <%= drivers[i].lng %></li>
+        <% } %>
+        </ul>
     </div>
+
+
+    <div id="map-canvas"></div>
 
 </div>
 </body>
