@@ -32,6 +32,10 @@ module.exports = (app) => {
 
 	})
 
+
+
+	// TODO: pin the RIDER on the map as well!!
+	
 	// Michael + view (nearestCabs)
 	app.get('/nearestCabs/:address', then(async(req, res) => {
 		// code to fetch from google maps 
@@ -71,7 +75,7 @@ module.exports = (app) => {
 				console.log('Driver :: ', record.cabid + ', Distance :: ' + distance)
 				availDrivers.push([distance.toFixed(2), record.cabid, record.latitude, record.longitude])
 			});
-			availDrivers.sort(_2dArraySort)
+			availDrivers = availDrivers.sort(_2dArraySort)
 			// console.log(availDrivers)
 			let sortedDrivers = []
 			for (let i=0; i<availDrivers.length; i++) {
@@ -82,7 +86,8 @@ module.exports = (app) => {
 			// var sortedDriversJson = multiDimensionArray2JSON(availDrivers)
 			console.log(sortedDrivers)
 			res.render('nearestCabs.ejs', {
-				drivers: sortedDrivers
+				drivers: sortedDrivers,
+				rider: {"lat": userLat, "lng": userLng}
 			})
 
 		} catch (e) {
