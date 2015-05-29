@@ -25,15 +25,12 @@ module.exports = (app) => {
     app.post('/findCabs', (req, res) => {
         // address should be formatted like:
         // 850+Cherry+Ave.+San+Bruno,+CA+94066
-        let address = req.body.address
-            //to do add the logic to find the nearest cabs 
-        res.redirect('/nearestCabs' + parseAddressForGoogle(address))
-
-
+        let address = parseAddressForGoogle(req.body.address)
+        //to do add the logic to find the nearest cabs 
+        res.redirect('/nearestCabs/' + address)
     })
 
 	// TODO: pin the RIDER on the map as well!!
-	
 	// Michael + view (nearestCabs)
 	app.get('/nearestCabs/:address', then(async(req, res) => {
 		// code to fetch from google maps 
