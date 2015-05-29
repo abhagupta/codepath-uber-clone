@@ -18,21 +18,19 @@ function _2dArraySort(a, b) {
 }
 
 module.exports = (app) => {
-	app.get('/', (req, res) => res.render('index.ejs'))
+    app.get('/', (req, res) => res.render('index.ejs'))
 
-	app.post('/', (req, res) => {
-		// address should be formatted like:
-		// 850+Cherry+Ave.+San+Bruno,+CA+94066
+    app.get('/findCabs', (req, res) => res.render('findCabs.ejs'))
 
-		let address = req.body.address
-		console.log("address: " + address);
-		//to do add the logic to find the nearest cabs 
-
-		res.redirect('/nearestCabs/' + address)
-
-	})
+    app.post('/findCabs', (req, res) => {
+        // address should be formatted like:
+        // 850+Cherry+Ave.+San+Bruno,+CA+94066
+        let address = req.body.address
+            //to do add the logic to find the nearest cabs 
+        res.redirect('/nearestCabs' + parseAddressForGoogle(address))
 
 
+    })
 
 	// TODO: pin the RIDER on the map as well!!
 	
@@ -97,4 +95,58 @@ module.exports = (app) => {
 
 
 	}))
+    /*
+     *  Driver routes
+     */
+
+
+   
+
+    app.get('/driver/:cabid?', (req, res) => {
+        console.log("reached here" + req.params.cabid)
+        res.render("driver.ejs", {
+            cabId: req.params.cabid
+        })
+    })
+
+    app.post('/driver', then(async(req, res) => {
+        let cab_id = req.body.cabId
+        let lat = req.body.lat
+        let long = req.body.long
+
+        if (lat === undefined) {
+            //flash error
+        }
+
+        if (long === undefined) {
+            //flash error
+        }
+
+        //check if the driver exists in db
+        let driver = await Driver.promise.findOne({
+            cabid: cab_id
+        })
+
+        if (!driver) {
+            let driver = new Driver()
+            driver.cabid = cab_id
+            driver.latitude = lat
+            driver.longitude = long
+            await driver.save()
+            res.redirect('/driver/' + cab_id)
+            return
+        } else {
+                driver.latitude = lat
+                driver.longitude = long
+                await driver.save()
+                res.redirect('/driver/' + cab_id)
+        }
+    }))
 }
+
+
+function parseAddressForGoogle(address) {
+    return address.replace(/[\n\s]/g, "+");
+
+}
+
