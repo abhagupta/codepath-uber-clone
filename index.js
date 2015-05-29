@@ -23,7 +23,7 @@ app.set('view engine', 'ejs') // set up ejs for templating
 // required for passport
 app.use(session({
   secret: 'ilovethenodejs',
-  store: new MongoStore({db: 'places'}),
+  store: new MongoStore({db: 'uber'}),
   resave: true,
   saveUninitialized: true
 }))

@@ -14,11 +14,16 @@
     <div class="jumbotron text-center">
         <h1><span class="fa fa-lock"></span> Uber Clone</h1>
 
+         <% if (cabId != undefined) { %>
+            Driver Information Saved For : <%= cabId %>
+         <%} else {%>   
+
+
+
         <p>Driver Information</p>
-         <form action="" method="post">
+         <form action="/driver" method="post">
             <div class="form-group">
-                <label>Driver Id</label>
-                <input type="text" class="form-control" name="driverId">
+               
                 <label>Cab Id</label>
                 <input type="text" class="form-control" name="cabId">
                 <label>Latitude</label>
@@ -30,6 +35,7 @@
             <button type="submit" class="btn btn-info btn-lg">Enter</button>
          </form>   
 
+         <%}%>
 
         
        
