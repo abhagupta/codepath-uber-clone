@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^0.8.3",
+    "bluebird-nodeify": "^1.0.0",
     "body-parser": "^1.12.4",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^0.8.1",

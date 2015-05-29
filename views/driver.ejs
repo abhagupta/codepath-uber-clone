@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <title>Uber Clone</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body         { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="jumbotron text-center">
+        <h1><span class="fa fa-lock"></span> Uber Clone</h1>
+
+         <% if (cabId != undefined) { %>
+            Driver Information Saved For : <%= cabId %>
+         <%} else {%>   
+
+
+
+        <p>Driver Information</p>
+         <form action="/driver" method="post">
+            <div class="form-group">
+               
+                <label>Cab Id</label>
+                <input type="text" class="form-control" name="cabId">
+                <label>Latitude</label>
+                <input type="text" class="form-control" name="lat">
+                <label>Longitude</label>
+                <input type="text" class="form-control" name="long">
+               
+            </div>
+            <button type="submit" class="btn btn-info btn-lg">Enter</button>
+         </form>   
+
+         <%}%>
+
+        
+       
+    </div>
+
+</div>
+</body>
+</html>
