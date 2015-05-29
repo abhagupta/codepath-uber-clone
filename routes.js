@@ -9,6 +9,14 @@ let Driver = require('./model/driver')
 
 let googleKey = 'AIzaSyBoQL7KUGLHgnh_Ws9ye-HrfoZYPUuJpFM'
 
+function _2dArraySort(a, b) {
+	if (a[0] === b[0]) {
+		return 0;
+	} else {
+		return (a[0] < b[0]) ? -1 : 1;
+	}
+}
+
 module.exports = (app) => {
 	app.get('/', (req, res) => res.render('index.ejs'))
 
@@ -51,13 +59,31 @@ module.exports = (app) => {
 				longitude: userLng
 			}
 
+			var availDrivers = []
+
 			_.forEach(drivers, function(record, key) {
 				let end = {
 					latitude: record.latitude,
 					longitude: record.longitude
 				}
-				console.log(haversine(start, end))
+				let distance = haversine(start, end)
+
+				console.log('Driver :: ', record.cabid + ', Distance :: ' + distance)
+				availDrivers.push([distance.toFixed(2), record.cabid, record.latitude, record.longitude])
 			});
+			availDrivers.sort(_2dArraySort)
+			// console.log(availDrivers)
+			let sortedDrivers = []
+			for (let i=0; i<availDrivers.length; i++) {
+				sortedDrivers.push({"cabid":availDrivers[i][1], "distance":availDrivers[i][0], "lat":availDrivers[i][2], "lng":availDrivers[i][3]})
+			}
+
+
+			// var sortedDriversJson = multiDimensionArray2JSON(availDrivers)
+			console.log(sortedDrivers)
+			res.render('nearestCabs.ejs', {
+				drivers: sortedDrivers
+			})
 
 		} catch (e) {
 			console.log(e)
@@ -65,6 +91,5 @@ module.exports = (app) => {
 
 
 
-		res.render('nearestCabs.ejs', {})
 	}))
 }
