@@ -14,18 +14,18 @@
     <div class="jumbotron text-center">
         <h1><span class="fa fa-lock"></span> Uber Clone</h1>
 
-        <p>Enter an address</p>
-         <form method="POST" >
+        <p>Rider Information</p>
+         <form id="loginform" action="/rider" method="post">
             <div class="form-group">
-                <label>Address</label>
-                <textarea name="address" class="form-control" rows="3" placeholder="Enter address here..."></textarea>
-                </textarea>
+               
+                <label>Rider Name</label>
+                <input type="text" class="form-control" name="ridername">
+                <label>password</label>
+                <input type="text" class="form-control" name="password">
+               
             </div>
-            <button type="submit" class="btn btn-info btn-lg">Find Cabs</button>
+            <button type="submit" class="btn btn-info btn-lg" name="signup" >Enter</button>
          </form>   
-
-
-        
        
     </div>
 
