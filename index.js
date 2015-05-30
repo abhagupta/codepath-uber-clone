@@ -7,32 +7,48 @@ let MongoStore = require('connect-mongo')(session)
 let mongoose = require('mongoose')
 let flash = require('connect-flash')
 let path = require('path')
+let passport = require('passport')
+let passportMiddleware = require('./middleware/passport')
+let LocalStrategy = require('passport-local').Strategy
 
 let app = new express(),
     port = process.env.PORT || 8000
+
+app.passport = passport
 
 // set up our express middleware
 app.use(morgan('dev')) // log every request to the console
 app.use(cookieParser('ilovethenodejs')) // read cookies (needed for auth)
 app.use(bodyParser.json()) // get information from html forms
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+
+// required for passport
+app.use(session({
+    secret: 'ilovethenodejs',
+    store: new MongoStore({
+        db: 'uber'
+    }),
+    resave: true,
+    saveUninitialized: true
+}))
+
+app.use(passport.initialize())
+
+// Enable passport persistent sessions
+app.use(passport.session())
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs') // set up ejs for templating
 
-// required for passport
-app.use(session({
-  secret: 'ilovethenodejs',
-  store: new MongoStore({db: 'uber'}),
-  resave: true,
-  saveUninitialized: true
-}))
 
 // Flash messages stored in session
 app.use(flash())
 
 mongoose.connect('mongodb://127.0.0.1:27017/uber')
 
-app.listen(port, ()=> console.log(`Listening @ http://127.0.0.1:${port}`))
+app.listen(port, () => console.log(`Listening @ http://127.0.0.1:${port}`))
 
+passportMiddleware(app)
 require('./routes')(app)
