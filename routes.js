@@ -6,6 +6,7 @@ require('songbird')
 
 // database models
 let Driver = require('./model/driver')
+let Rider = require('./model/rider')
 
 let googleKey = 'AIzaSyBoQL7KUGLHgnh_Ws9ye-HrfoZYPUuJpFM'
 
@@ -42,7 +43,7 @@ module.exports = (app) => {
             // do the calculation
             // create the objects of cabs
             // render them on the google maps
-            console.log("********************** Session User Id  ******************************: " +  req.user._id)
+            //console.log("********************** Session User Id  ******************************: " +  req.user._id)
             let userAddress = req.params.address
             console.log("User address :" + userAddress);
             try {
@@ -56,7 +57,22 @@ module.exports = (app) => {
                 let userLat = results.results[0].geometry.location.lat
                 let userLng = results.results[0].geometry.location.lng
 
-                let drivers = await Driver.promise.find({})
+                //save the userLat and userLang in rider collection - to notify driver about rider's location
+
+                let rider = await Rider.promise.findById(req.user._id)
+                if(rider){
+                	rider.latitude = userLat
+                	rider.longitude = userLng
+                	await rider.save();
+                }
+
+                let drivers = await Driver.promise.find({
+                    status: {
+                        $ne: 'busy'
+                    }
+                })
+
+                console.log("Drivers: " + drivers)
 
                 let start = {
                     latitude: userLat,
@@ -113,7 +129,6 @@ module.exports = (app) => {
 
 
     app.get('/driver/:cabid?', (req, res) => {
-        console.log("reached here" + req.params.cabid)
         res.render("driver.ejs", {
             cabId: req.params.cabid
         })
@@ -131,6 +146,10 @@ module.exports = (app) => {
         if (long === undefined) {
             //flash error
         }
+
+        let driver = await Driver.promise.findOne({
+            cabid: req.params.cabId
+        })
 
 
         if (!driver) {
@@ -157,29 +176,55 @@ module.exports = (app) => {
         res.render("rider.ejs")
     })
 
-    // app.post('/rider', function(req, res, next) {
-    //     console.log('Time:', Date.now())
-    //     next()
-    // },(req, res) => {
-    //     console.log("Reached post")
-    //     res.redirect('/')
-    // })
-
-
-
-      app.post('/rider', passport.authenticate('local-signup', {
-         successRedirect: '/findCabs',
-         failureRedirect: 'http://google.com',
-         failureFlash: true
-     }), function(err, req, res, next) {
-     	console.log("Error: " + err)
-     	res.redirect('http://google.com')
+    app.get('/riderDashboard', (req, res) => {
+        res.render("riderDashboard.ejs")
     })
 
-    // app.post('/choseDriver/:driverId', isLoggedIn, (req, res) => {
-    // 	let driverId = req.params.driverId
-    // 	//server should call driver and pass the rider id
-    // })
+
+    app.post('/rider', passport.authenticate('local-signup', {
+        successRedirect: '/riderDashboard',
+        failureRedirect: 'http://google.com',
+        failureFlash: true
+    }), function(err, req, res, next) {
+        console.log("Error: " + err)
+        res.redirect('http://google.com')
+    })
+
+
+
+    /*
+     *  Reserve driver api
+     */
+
+    app.get('/reserveDriver/:cabId', then(async(req, res) => {
+        let driver = await Driver.promise.findOne({
+            cabid: req.params.cabId
+        })
+
+        driver.status = 'busy'
+        driver.riderid = req.user._id
+
+        await driver.save()
+
+        res.render('riderDashboard.ejs', {
+            selectedDriver: driver
+
+        })
+
+    }))
+    
+    app.get('/reachedDestination/:cabId', then(async(req, res) => {
+        let driver = await Driver.promise.findOne({
+            cabid: req.params.cabId
+        })
+        driver.status = 'available'
+        driver.riderid = req.user._id
+
+        await driver.save()
+
+        res.render('riderDashboard.ejs')
+
+    }))
 
 }
 
