@@ -12,7 +12,7 @@
 <div class="container">
 
     <div class="jumbotron text-center">
-        <h1><span class="fa fa-lock"></span> Rider Dashboard</h1>
+        <h1>Rider Dashboard</h1>
 
       
        
@@ -20,7 +20,7 @@
 <br/>
         <% if (typeof selectedDriver !== 'undefined') { %>
             <p>Driver <%= selectedDriver.cabid %> is on the way.</p>
-            <a href="/reachedDestination/<%= selectedDriver.cabid %>" class="btn btn-info ">Reached Dstination</a>
+            <a href="/reachedDestination/<%= selectedDriver.cabid %>" class="btn btn-info ">Reached Destination</a>
         <% } else { %>
          <a href="/findCabs" class="btn btn-info ">Find Cabs</a>
          <%} %>
