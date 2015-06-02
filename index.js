@@ -57,6 +57,7 @@ browserify.settings({
             transform: ['babelify']
         })
 app.use('/js/index.js', browserify('./public/js/index.js'))
+app.use('/js/notify.js', browserify('./public/js/notify.js'))
 
 //*****  //
 
