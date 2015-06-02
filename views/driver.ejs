@@ -16,7 +16,9 @@
 
     </div>
          <% if (cabId != undefined) { %>
-            Driver Information Saved For : <%= cabId %>
+            Driver Information Saved For : <span id="cabId"> <%= cabId %> </span>
+            <br>
+            Request Accepted for <span id="riderInfomation"></span>
          <%} else {%>   
 
 
@@ -34,7 +36,15 @@
                
             </div>
             <button type="submit" class="btn btn-info btn-lg">Enter</button>
-         </form>   
+         </form> 
+
+         <ul id="messages" class="list-group">
+            <li id="template" style="display: none; list-style-type: none" class="list-group-item">
+                <i></i>
+                <span></span>
+            </li>
+       
+        </ul>  
 
          <%}%>
 
@@ -42,5 +52,7 @@
        
 
 </div>
+<script src="/js/index.js"></script>
+
 </body>
 </html>
