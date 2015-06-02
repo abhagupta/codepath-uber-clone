@@ -8,8 +8,12 @@ let mongoose = require('mongoose')
 let flash = require('connect-flash')
 let path = require('path')
 let passport = require('passport')
+let browserify = require('browserify-middleware')
 let passportMiddleware = require('./middleware/passport')
 let LocalStrategy = require('passport-local').Strategy
+let Server = require('http').Server
+let io = require('socket.io')
+
 
 let app = new express(),
     port = process.env.PORT || 8000
@@ -48,7 +52,39 @@ app.use(flash())
 
 mongoose.connect('mongodb://127.0.0.1:27017/uber')
 
-app.listen(port, () => console.log(`Listening @ http://127.0.0.1:${port}`))
+//**** browserify  ******/
+browserify.settings({
+            transform: ['babelify']
+        })
+app.use('/js/index.js', browserify('./public/js/index.js'))
+
+//*****  //
+
+// *********** io socket ***********
+
+
+
+let server = Server(app)
+io= io(server)
+
+
+
+server.listen(port, () => console.log(`Http server listening at :${port}`))
+io.on('connection', function(socket) {
+	//let username = socket.request.session.username
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+
+    socket.on('reserve driver', function(cabId) {
+        console.log('message: ' + cabId);
+        // let driverToBeReserved =  await Driver.promise.findOne({cabid:cabId})
+        // console.log("Driver to be reserved :" + driverToBeReserved)
+       io.emit('event', {cabId:cabId})
+    })
+
+});
+/******************/
 
 passportMiddleware(app)
-require('./routes')(app)
+require('./routes')(app, io)

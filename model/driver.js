@@ -9,7 +9,8 @@ let driverSchema = mongoose.Schema({
   latitude: {type: Number, required: true},
   longitude: {type: Number, required: true},
   status : {type: String, required: false},
-  riderid : {type: String, required: false}
+  riderName : {type: String, required: false}
+
 })
 
 // driverSchema.methods.generateHash = async function(password) {
