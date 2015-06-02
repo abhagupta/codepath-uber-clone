@@ -4,6 +4,8 @@
     <title>Uber Clone</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ 
     <style>
         body         { padding-top:80px; }
     </style>
@@ -12,13 +14,15 @@
 <div class="container">
 
     <div class="jumbotron text-center">
-        <h1><span class="fa fa-lock"></span>Driver Dashborad</h1>
+        <h1><span class="fa fa-lock"></span> <%= cabId %>'s Dashboard</h1>
 
     </div>
          <% if (cabId != undefined) { %>
             Driver Information Saved For : <span id="cabId"> <%= cabId %> </span>
             <br>
-            Request Accepted for <span id="riderInfomation"></span>
+            <span  class="riderInfomation"> BOX</span>
+            
+            
          <%} else {%>   
 
 
@@ -52,7 +56,17 @@
        
 
 </div>
+
 <script src="/js/index.js"></script>
+<script src="/js/notify.js"></script>
+
+<script type="text/javascript">
+alert("reached")
+$(".riderInfomation").notify("I'm left of the box");
+</script>
+
+
+
 
 </body>
 </html>
