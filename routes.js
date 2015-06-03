@@ -219,7 +219,8 @@ module.exports = (app) => {
         socket.emit('reserve driver', req.params.cabId)
 
         res.render('riderDashboard.ejs', {
-            selectedDriver: driver
+            selectedDriver: driver,
+            rider: req.user.riderName
 
         })
 
