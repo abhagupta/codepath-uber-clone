@@ -53,13 +53,18 @@
                                     position: myLatlng,
                                     map: map,
                                     icon: icon,
-                                    title: '<%= drivers[i][1] %>'
+                                    title: '<%= drivers[i][1] %>',
+                                    url: "/reserveDriver/<%=  drivers[i][1] %>"
                                 });
                 bounds.extend(marker.position);
                 console.log(marker);
+                 google.maps.event.addListener(marker, 'click', function() {
+                   window.location.href = marker.url;
+                 });
             <%}%> 
             map.fitBounds(bounds);
         }
+       
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </head>
