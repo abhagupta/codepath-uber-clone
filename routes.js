@@ -108,9 +108,9 @@ module.exports = (app) => {
 
 
         }))
-    /*
-    *  Driver routes
-    */
+        /*
+         *  Driver routes
+         */
 
     app.get('/driver/:cabid?', (req, res) => {
         res.render("driver.ejs", {
@@ -148,7 +148,7 @@ module.exports = (app) => {
             driver.latitude = lat
             driver.longitude = long
             await driver.save()
-            res.redirect('/driver/' + cab_id )
+            res.redirect('/driver/' + cab_id)
         }
     }))
 
@@ -175,8 +175,8 @@ module.exports = (app) => {
     }))
 
     app.get('/riderDashboard', (req, res) => {
-        res.render("riderDashboard.ejs",{
-        	rider: req.user.riderName
+        res.render("riderDashboard.ejs", {
+            rider: req.user.riderName
         })
     })
 
@@ -201,10 +201,17 @@ module.exports = (app) => {
             cabid: req.params.cabId
         })
 
-        driver.status = 'busy'
-        driver.riderName = req.user.riderName
+        if (driver) {
+            driver.status = 'busy'
+            driver.riderName = req.user.riderName
+            await driver.save()
+        } else {
+            console.log("Driver not found :" + req.params.cabId)
+        }
 
-        await driver.save()
+
+
+
 
         //send the emit message to driversver
 
@@ -230,13 +237,14 @@ module.exports = (app) => {
         let driver = await Driver.promise.findOne({
             cabid: req.params.cabId
         })
-        driver.status = 'available'
-        driver.riderid = req.user._id
+        if (driver) {
+            driver.status = 'available'
+            driver.riderid = req.user._id
+            await driver.save()
+        }
 
-        await driver.save()
-
-        res.render('riderDashboard.ejs',{
-        	rider: req.user.riderName
+        res.render('riderDashboard.ejs', {
+            rider: req.user.riderName
         })
 
     }))
