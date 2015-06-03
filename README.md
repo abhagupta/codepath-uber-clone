@@ -2,7 +2,7 @@
 
 A mini Uber clone representing a basic functinality of 
  - Registering as Driver
- - Finding Cabs from a given address
+ - Registering as Rider
 
 The application does following :
 - Find nearest cabs/drivers who have registered themselves in the database
@@ -27,4 +27,7 @@ Driver are registered with three values :
 - longitide
 
 Driver are not maintained in session
+
+## Flow diagram
+![Flow Diagram](Flow Diagram.png)
 
