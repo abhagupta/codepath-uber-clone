@@ -235,7 +235,9 @@ module.exports = (app) => {
 
         await driver.save()
 
-        res.render('riderDashboard.ejs')
+        res.render('riderDashboard.ejs',{
+        	rider: req.user.riderName
+        })
 
     }))
 
