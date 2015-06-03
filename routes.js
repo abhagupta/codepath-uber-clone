@@ -39,7 +39,9 @@ module.exports = (app) => {
     // Michael + view (nearestCabs)
     app.get('/nearestCabs/:address', then(async(req, res) => {
 
-           
+    	
+
+
             // code to fetch from google maps 
             // parse the response
             // do the calculation
@@ -106,11 +108,9 @@ module.exports = (app) => {
 
 
         }))
-        /*
-         *  Driver routes
-         */
-
-
+    /*
+    *  Driver routes
+    */
 
     app.get('/driver/:cabid?', (req, res) => {
         res.render("driver.ejs", {
@@ -161,13 +161,17 @@ module.exports = (app) => {
     })
 
     app.get('/riderFor/:cabId', then(async(req, res) => {
-    	let record = await Driver.promise.findOne({cabid:req.params.cabId})
-    	let rider = record.riderName
-    	console.log("################### Rider recieved : " + rider)
+        let record = await Driver.promise.findOne({
+            cabid: req.params.cabId
+        })
+        let rider = record.riderName
+        console.log("################### Rider recieved : " + rider)
 
-    	res.send({rider:rider})
-    	//res.json(rider);
-        
+        res.send({
+                rider: rider
+            })
+            //res.json(rider);
+
     }))
 
     app.get('/riderDashboard', (req, res) => {
@@ -177,14 +181,14 @@ module.exports = (app) => {
 
     app.post('/rider', passport.authenticate('local-signup', {
         successRedirect: '/riderDashboard',
-        failureRedirect: 'http://google.com',
+        failureRedirect: '/riderDashboard',
         failureFlash: true
-    }), function(err, req, res, next){
-    	    let sess = req.session
-            console.log(sess)
+    }), function(err, req, res, next) {
+        let sess = req.session
+        console.log(sess)
             //req.session.username = req.body.username
-            next()
-    },function(err, req, res, next) {
+        next()
+    }, function(err, req, res, next) {
         console.log("Error: " + err)
         res.redirect('http://google.com')
     })
@@ -203,8 +207,6 @@ module.exports = (app) => {
         driver.status = 'busy'
         driver.riderName = req.user.riderName
 
-
-
         await driver.save()
 
         //send the emit message to driversver
@@ -216,8 +218,6 @@ module.exports = (app) => {
         socket.on('connect', () => {
             console.log('connected')
         })
-
-        console.log("reserving driver")
 
         socket.emit('reserve driver', req.params.cabId)
 
