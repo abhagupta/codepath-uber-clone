@@ -39,7 +39,7 @@ module.exports = (app) => {
     // Michael + view (nearestCabs)
     app.get('/nearestCabs/:address', then(async(req, res) => {
 
-    	
+
 
 
             // code to fetch from google maps 
@@ -148,7 +148,7 @@ module.exports = (app) => {
             driver.latitude = lat
             driver.longitude = long
             await driver.save()
-            res.redirect('/driver/' + cab_id)
+            res.redirect('/driver/' + cab_id )
         }
     }))
 
@@ -175,7 +175,9 @@ module.exports = (app) => {
     }))
 
     app.get('/riderDashboard', (req, res) => {
-        res.render("riderDashboard.ejs")
+        res.render("riderDashboard.ejs",{
+        	rider: req.user.riderName
+        })
     })
 
 
@@ -184,11 +186,6 @@ module.exports = (app) => {
         failureRedirect: '/riderDashboard',
         failureFlash: true
     }), function(err, req, res, next) {
-        let sess = req.session
-        console.log(sess)
-            //req.session.username = req.body.username
-        next()
-    }, function(err, req, res, next) {
         console.log("Error: " + err)
         res.redirect('http://google.com')
     })
