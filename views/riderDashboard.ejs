@@ -14,17 +14,19 @@
     <div class="jumbotron text-center">
         <h1>Rider Dashboard</h1>
 
-      
-       
     </div> 
 <br/>
         <% if (typeof selectedDriver !== 'undefined') { %>
-            <p>Driver <%= selectedDriver.cabid %> is on the way.</p>
-            <a href="/reachedDestination/<%= selectedDriver.cabid %>" class="btn btn-info ">Reached Destination</a>
+            <p>Driver <%= selectedDriver.cabid %>  <strong id="status">requested</strong>.</p>
+            <a href="/reachedDestination/<%= selectedDriver.cabid %>" class="btn btn-info " id="reachedDestination" style="display:none">Reached Destination</a>
         <% } else { %>
          <a href="/findCabs" class="btn btn-info ">Find Cabs</a>
          <%} %>
 
 </div>
 </body>
+
+<script src="/js/clientIndex.js"></script>
+
+
 </html>

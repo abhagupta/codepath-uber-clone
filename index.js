@@ -57,18 +57,15 @@ browserify.settings({
             transform: ['babelify']
         })
 app.use('/js/index.js', browserify('./public/js/index.js'))
+app.use('/js/clientIndex.js', browserify('./public/js/clientIndex.js'))
 app.use('/js/notify.js', browserify('./public/js/notify.js'))
 
 //*****  //
 
 // *********** io socket ***********
 
-
-
 let server = Server(app)
 io= io(server)
-
-
 
 server.listen(port, () => console.log(`Http server listening at :${port}`))
 io.on('connection', function(socket) {
@@ -77,11 +74,14 @@ io.on('connection', function(socket) {
         console.log('user disconnected');
     });
 
+    // receive message when rider sends a message to reserve a driver
     socket.on('reserve driver', function(cabId) {
-        console.log('message: ' + cabId);
-        // let driverToBeReserved =  await Driver.promise.findOne({cabid:cabId})
-        // console.log("Driver to be reserved :" + driverToBeReserved)
-       io.emit('event', {cabId:cabId})
+       io.emit('reserve driver', {cabId:cabId})
+    })
+
+    // message when driver accepts a rider's request
+    socket.on('accept', function(driver){
+    	io.emit('accept', {driver:driver})
     })
 
 });
