@@ -13,7 +13,12 @@ let passportMiddleware = require('./middleware/passport')
 let LocalStrategy = require('passport-local').Strategy
 let Server = require('http').Server
 let io = require('socket.io')
+let Driver = require('./model/driver')
+let Rider = require('./model/rider')
+let haversine = require('haversine')
+let request = require('request')
 
+let googleKey = 'AIzaSyBoQL7KUGLHgnh_Ws9ye-HrfoZYPUuJpFM'
 
 let app = new express(),
     port = process.env.PORT || 8000
@@ -54,8 +59,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/uber')
 
 //**** browserify  ******/
 browserify.settings({
-            transform: ['babelify']
-        })
+    transform: ['babelify']
+})
 app.use('/js/index.js', browserify('./public/js/index.js'))
 app.use('/js/clientIndex.js', browserify('./public/js/clientIndex.js'))
 app.use('/js/notify.js', browserify('./public/js/notify.js'))
@@ -65,26 +70,45 @@ app.use('/js/notify.js', browserify('./public/js/notify.js'))
 // *********** io socket ***********
 
 let server = Server(app)
-io= io(server)
+io = io(server)
 
 server.listen(port, () => console.log(`Http server listening at :${port}`))
 io.on('connection', function(socket) {
-	//let username = socket.request.session.username
+    //let username = socket.request.session.username
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
 
     // receive message when rider sends a message to reserve a driver
-    socket.on('reserve driver', function(cabId) {
-       io.emit('reserve driver', {cabId:cabId})
+    socket.on('reserve driver', function(driver) {
+        io.emit('reserve driver', driver)
     })
 
     // message when driver accepts a rider's request
-    socket.on('accept', function(driver){
-    	io.emit('accept', {driver:driver})
+    socket.on('accept', function(driverInfo) {
+        Driver.findOne({
+            cabid: driverInfo.driver
+        }, function(err, driver) {
+            Rider.findOne({
+                riderName: driver.riderName
+            }, function(err, rider) {
+                let startPos = driver.latitude + ',' + driver.longitude
+                let endPos = rider.latitude + ',' + rider.longitude
+                request('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + startPos + '&destinations=' + endPos + '&key=' + googleKey, function(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        let parsed = JSON.parse(body)
+                        // meters to miles
+                        let distance = (parsed.rows[0].elements[0].distance.value * 0.00062137).toFixed(2)
+                        let duration = parsed.rows[0].elements[0].duration.text
+                        io.emit('accept', {
+                            driver, distance, duration
+                        })
+                    }
+                })
+            })
+        })
     })
-
-});
+})
 /******************/
 
 passportMiddleware(app)
