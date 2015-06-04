@@ -216,7 +216,8 @@ module.exports = (app) => {
             console.log('connected')
         })
 
-        socket.emit('reserve driver', req.params.cabId)
+        socket.emit('reserve driver', driver)
+        // socket.emit('reserve driver', req.params.cabId)
 
         res.render('riderDashboard.ejs', {
             selectedDriver: driver,
