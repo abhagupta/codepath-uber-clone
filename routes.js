@@ -112,11 +112,22 @@ module.exports = (app) => {
          *  Driver routes
          */
 
-    app.get('/driver/:cabid?', (req, res) => {
-        res.render("driver.ejs", {
-            cabId: req.params.cabid
-        })
-    })
+    app.get('/driver/:cabid?', then(async(req, res) => {
+
+        let cabid = req.params.cabid;
+        if (cabid) {
+            let driver = await Driver.promise.findOne({
+                cabid: cabid
+            })
+			res.render("driver.ejs", {
+				cabId : cabid,
+                driver:driver,
+                message: req.flash('error')
+            })
+		}else{
+			res.render("driver.ejs")
+		}
+    }))
 
     app.post('/driver', then(async(req, res) => {
         let cab_id = req.body.cabId
@@ -164,11 +175,11 @@ module.exports = (app) => {
         let record = await Driver.promise.findOne({
             cabid: req.params.cabId
         })
-        let rider = record.riderName
-        console.log("################### Rider recieved : " + rider)
+        
+        //console.log("################### Rider recieved : " + rider)
 
         res.send({
-                rider: rider
+                rider: record // this is driver record, this is all we need because we are saving requested rider's information with driver record
             })
             //res.json(rider);
 
@@ -204,14 +215,12 @@ module.exports = (app) => {
         if (driver) {
             driver.status = 'busy'
             driver.riderName = req.user.riderName
+            driver.ridersLatitude = req.user.latitude
+            driver.ridersLongitude = req.user.longitude
             await driver.save()
         } else {
             console.log("Driver not found :" + req.params.cabId)
         }
-
-
-
-
 
         //send the emit message to driversver
 

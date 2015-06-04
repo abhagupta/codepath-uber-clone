@@ -2,28 +2,69 @@
 <html>
 <head>
     <title>Uber Clone</title>
+     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+     // var map;
+     //    var bounds = new google.maps.LatLngBounds();
+     //    function initialize() {
+     //      var mapOptions = {
+     //        zoom: 8
+     //      };
+     //      map = new google.maps.Map(document.getElementById('map-canvas'),
+     //          mapOptions);
+        
+
+     //        var myLatlng = new google.maps.LatLng(37.483994, -122.227399);
+     //        var marker = new google.maps.Marker({
+     //                position: myLatlng,
+     //                map: map,
+     //                title: 'You'
+     //            });
+     //        bounds.extend(marker.position);
+          
+     //        map.fitBounds(bounds);
+     //    }
+       
+     //    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
     <style>
         body         { padding-top:80px; }
+
+          html, body, #map-canvas {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+    
     </style>
 </head>
 <body>
 <div class="container">
+
 
     <div class="jumbotron text-center">
         <h1><span class="fa"></span>Driver <%= cabId %>'s Dashboard</h1>
 
     </div>
          <% if (cabId != undefined) { %>
-            Driver Information Saved For : <span id="cabId"> <%= cabId %> </span>
+            Driver  : <span id="cabId"> <%= cabId %> </span>
             <br>
+
             
             
             <button style="display:none" class="btn btn-info" id="alert"></button>
             <br>
             <button style="display:none" id="decision" class="btn btn-info">Accept</button>
+
+            <input type="hidden" value=<%= JSON.stringify(driver)%> id="driverInfo" />
+
+            <div id="map-canvas" style="width:600px;height:450px"></div>
+           
+
          <%} else {%>   
 
 
@@ -58,7 +99,7 @@
 
 </div>
 <script src="/js/index.js"></script>
-<script src="/js/notify.js"></script>
+
 
 </body>
 </html>
