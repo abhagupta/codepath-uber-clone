@@ -63,7 +63,6 @@ browserify.settings({
 })
 app.use('/js/index.js', browserify('./public/js/index.js'))
 app.use('/js/clientIndex.js', browserify('./public/js/clientIndex.js'))
-app.use('/js/notify.js', browserify('./public/js/notify.js'))
 
 //*****  //
 
@@ -87,7 +86,7 @@ io.on('connection', function(socket) {
     // message when driver accepts a rider's request
     socket.on('accept', function(driverInfo) {
         Driver.findOne({
-            cabid: driverInfo.driver
+            cabid: driverInfo.driver.trim()
         }, function(err, driver) {
             Rider.findOne({
                 riderName: driver.riderName

@@ -39,9 +39,6 @@ module.exports = (app) => {
     // Michael + view (nearestCabs)
     app.get('/nearestCabs/:address', then(async(req, res) => {
 
-
-
-
             // code to fetch from google maps 
             // parse the response
             // do the calculation
@@ -125,7 +122,9 @@ module.exports = (app) => {
                 message: req.flash('error')
             })
 		}else{
-			res.render("driver.ejs")
+			res.render("driver.ejs",{
+				cabId : cabid
+			})
 		}
     }))
 

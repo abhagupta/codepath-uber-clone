@@ -7,30 +7,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-    <script>
-     // var map;
-     //    var bounds = new google.maps.LatLngBounds();
-     //    function initialize() {
-     //      var mapOptions = {
-     //        zoom: 8
-     //      };
-     //      map = new google.maps.Map(document.getElementById('map-canvas'),
-     //          mapOptions);
-        
-
-     //        var myLatlng = new google.maps.LatLng(37.483994, -122.227399);
-     //        var marker = new google.maps.Marker({
-     //                position: myLatlng,
-     //                map: map,
-     //                title: 'You'
-     //            });
-     //        bounds.extend(marker.position);
-          
-     //        map.fitBounds(bounds);
-     //    }
-       
-     //    google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
+    
     <style>
         body         { padding-top:80px; }
 
@@ -47,10 +24,10 @@
 
 
     <div class="jumbotron text-center">
-        <h1><span class="fa"></span>Driver Dashboard - <%= cabId %></h1>
+        <h1><span class="fa"></span>Driver Dashboard  <%= cabId %></h1>
 
     </div>
-         <% if (cabId != undefined) { %>
+         <% if (cabId !== undefined) { %>
 
             Driver  : <span id="cabId"> <%= cabId %> </span>
 
@@ -95,9 +72,7 @@
         </ul>  
 
          <%}%>
-
-        
-       
+    
 
 </div>
 <script src="/js/index.js"></script>
