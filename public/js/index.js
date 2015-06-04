@@ -17,15 +17,18 @@ socket.on('connect', () => {
     console.log('Driver connected')
 })
 
+let rider = null
 
 socket.on('reserve driver', function(data) {
     let myCabId = document.getElementById("cabId").innerText
-    if (myCabId.trim() == data.cabId.trim()) {
+    console.log(myCabId)
+    if (myCabId.trim() == data.cabid.trim()) {
         //message is for me, hence find the rider that has sent the request
         $.get('/riderFor/' + myCabId, function(data, status) {
             document.getElementById("alert").style.display = "block"
             document.getElementById("decision").style.display = "block"
             notify(data.rider)
+
         })
 
 

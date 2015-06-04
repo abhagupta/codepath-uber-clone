@@ -18,6 +18,7 @@
 <br/>
         <% if (typeof selectedDriver !== 'undefined') { %>
             <p>Driver <%= selectedDriver.cabid %>  <strong id="status">requested</strong>.</p>
+            <div id="driverstatus"></div>
             <a href="/reachedDestination/<%= selectedDriver.cabid %>" class="btn btn-info " id="reachedDestination" style="display:none">Reached Destination</a>
         <% } else { %>
          <a href="/findCabs" class="btn btn-info ">Find Cabs</a>
